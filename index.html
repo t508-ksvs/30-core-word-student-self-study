@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>30 個核心單字｜字根字族學生自學版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #0d0f14; }
+
+:root {
+  --bg:      #0d0f14;
+  --surface: #161922;
+  --border:  #2a2f3e;
+  --c1: #7c9ef8;
+  --c2: #f0a868;
+  --c3: #68d9b0;
+  --c4: #e070c0;
+  --t1: #eef0f8;
+  --t2: #a8b0c8;
+  --t3: #6070a0;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Inter', 'Noto Sans TC', sans-serif;
+}
+
+/* Progress */
+.progress { height: 3px; background: var(--border); flex-shrink: 0; }
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--c1), var(--c4));
+  transition: width 0.4s;
+  width: 0%;
+}
+
+/* Deck */
+.deck { position: fixed; inset: 0; display: flex; flex-direction: column; }
+.slides { flex: 1; position: relative; overflow: hidden; padding-bottom: 48px; }
+
+/* Slides */
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none;
+  transform: translateX(50px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.slide.is-active  { opacity: 1; pointer-events: all; transform: translateX(0); }
+.slide.is-prev    { opacity: 0; transform: translateX(-50px); }
+
+/* ── Cover ── */
+.slide-cover {
+  background: radial-gradient(ellipse at 30% 40%, #1a2444 0%, #0d0f14 70%);
+  align-items: center; justify-content: center;
+  text-align: center; gap: 1.8rem;
+}
+.cover-title { font: 900 clamp(2.8rem,8vw,5.5rem)/1.1 var(--sans); color: var(--t1); }
+.cover-title em { font-style: normal; color: var(--c1); }
+.cover-sub  { font: 400 clamp(1rem,2.5vw,1.5rem)/1.5 var(--sans); color: var(--t2); }
+.cover-tags { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; }
+.cover-tag  {
+  font: 500 0.9rem var(--mono);
+  padding: 0.4rem 1rem; border-radius: 999px;
+  border: 1px solid var(--border); color: var(--t2); background: var(--surface);
+}
+.cover-hint { font: 400 0.78rem var(--mono); color: var(--t3); margin-top: 1.5rem; }
+
+/* ── Word Slide ── */
+.slide-word { flex-direction: row; }
+
+.word-panel {
+  flex-shrink: 0; width: 340px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  gap: 0.9rem;
+  padding: 1.6rem 1.5rem;
+  overflow-y: auto; overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.word-num  { font: 500 0.78rem/1 var(--mono); color: var(--t3); letter-spacing: 2px; text-transform: uppercase; }
+.word-en   { font: 800 clamp(1.9rem,3.2vw,2.8rem)/1.1 var(--sans); color: var(--t1); }
+.word-pos  { font: 500 0.85rem var(--mono); color: var(--c2); margin-left: 0.4rem; }
+.word-zh   { font: 700 clamp(1.1rem,1.8vw,1.4rem)/1.2 var(--sans); color: var(--c3); }
+
+.word-roots { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+.root-chip  {
+  display: inline-flex; flex-direction: column; align-items: center;
+  background: #1c2030; border: 1px solid var(--border);
+  border-radius: 8px; padding: 0.3rem 0.65rem;
+  font-family: var(--mono); line-height: 1.3;
+}
+.root-chip-en { font-size: 0.9rem; font-weight: 600; }
+.root-chip-zh { font-size: 0.68rem; color: var(--t3); }
+.root-sep     { font-size: 1.1rem; color: var(--t3); font-weight: bold; line-height: 1; }
+
+.word-divider { height: 1px; background: var(--border); flex-shrink: 0; }
+
+.word-memory {
+  background: #1a1c2a;
+  border-left: 3px solid var(--c2);
+  border-radius: 0 6px 6px 0;
+  padding: 0.75rem 0.9rem;
+  font: 400 0.85rem/1.65 var(--sans);
+  color: var(--t2);
+}
+.word-memory strong { color: var(--c2); font-weight: 700; }
+
+.word-image { flex: 1; overflow: hidden; background: #111318; }
+.word-image img { width: 100%; height: 100%; object-fit: contain; object-position: center; display: block; }
+
+/* ── Review Slide ── */
+.slide-review { background: #0a0c10; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.slide-review > img {
+  width: auto; height: auto;
+  max-width: 75%; max-height: 70%;
+  object-fit: contain;
+  cursor: pointer;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  transition: transform 0.2s;
+  z-index: 10;
+}
+.slide-review > img:hover {
+  transform: scale(1.02);
+}
+.review-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-end;
+  padding-bottom: 3rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 40%);
+  text-align: center;
+  pointer-events: none;
+}
+.review-title { font: 900 clamp(1.8rem,4vw,3rem)/1.2 var(--sans); color: var(--t1); text-shadow: 0 2px 16px rgba(0,0,0,0.9); margin-bottom: 0.6rem; pointer-events: all; }
+.review-sub   { font: 400 clamp(0.85rem,1.4vw,1.05rem)/1.5 var(--sans); color: var(--t2); text-shadow: 0 1px 8px rgba(0,0,0,0.9); max-width: 68ch; padding: 0 2rem; pointer-events: all; }
+
+/* Lightbox */
+.lightbox {
+  display: none; position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,0.95); backdrop-filter: blur(5px);
+  align-items: center; justify-content: center;
+  cursor: zoom-out;
+}
+.lightbox.open { display: flex; }
+.lightbox img {
+  max-width: 95vw; max-height: 95vh;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+/* Text Overview Slide */
+.slide-text-overview {
+  background: var(--bg);
+  padding: 3rem 4rem;
+  display: flex; flex-direction: column;
+}
+.text-overview-title {
+  font: 900 2rem var(--sans); color: var(--t1);
+  margin-bottom: 2rem; text-align: center; letter-spacing: 2px;
+}
+.text-overview-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0.6rem 2rem; flex: 1; align-content: center;
+}
+.text-overview-item {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 6px; padding: 0.5rem 1rem;
+  display: flex; align-items: center;
+  font: 400 1.05rem var(--sans);
+  cursor: pointer; transition: border-color 0.15s, transform 0.15s;
+}
+.text-overview-item:hover { border-color: var(--c1); transform: scale(1.02); }
+.text-overview-num { color: var(--t3); font-family: var(--mono); width: 2.2rem; }
+.text-overview-word { font-family: var(--mono); font-size: 1.15rem; min-width: 9rem; }
+.text-overview-eq { font-family: var(--mono); }
+
+/* Notes (hidden) */
+.notes { display: none; }
+
+/* Nav bar */
+.nav {
+  position: fixed; bottom: 0; left: 0; right: 0; height: 48px;
+  background: rgba(13,15,20,0.94); backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 1.5rem; z-index: 200;
+}
+.nav-counter { font: 500 0.78rem var(--mono); color: var(--t3); }
+.nav-arrows  { display: flex; gap: 0.4rem; }
+.nav-btn {
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--t2); border-radius: 6px;
+  padding: 0.22rem 0.85rem; font: 400 0.88rem var(--sans);
+  cursor: pointer; transition: background 0.15s, color 0.15s;
+}
+.nav-btn:hover { background: var(--border); color: var(--t1); }
+.nav-hint { font: 400 0.72rem var(--mono); color: var(--t3); }
+
+/* Presenter panel */
+.presenter-panel {
+  display: none; position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 1.2rem; padding: 2rem;
+}
+.presenter-panel.open { display: flex; }
+.presenter-panel h2 { font: 700 1rem var(--sans); color: var(--c1); text-transform: uppercase; letter-spacing: 1px; }
+.presenter-script {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 1.8rem; max-width: 760px; width: 100%; max-height: 62vh; overflow-y: auto;
+  font: 400 1.25rem/1.9 var(--sans); color: var(--t1);
+}
+.presenter-close {
+  position: absolute; top: 1.5rem; right: 1.5rem;
+  background: var(--surface); border: 1px solid var(--border); color: var(--t2);
+  border-radius: 8px; padding: 0.35rem 0.9rem; cursor: pointer; font: 400 0.88rem var(--sans);
+}
+
+/* Overview */
+.overview-panel {
+  display: none; position: fixed; inset: 0; z-index: 400;
+  background: var(--bg); overflow-y: auto;
+  padding: 5rem 2rem 2rem; gap: 1rem; flex-wrap: wrap;
+  align-content: flex-start; justify-content: center;
+}
+.overview-panel.open { display: flex; }
+.overview-thumb {
+  width: 200px; aspect-ratio: 16/10;
+  background: var(--surface); border-radius: 8px; overflow: hidden;
+  border: 2px solid var(--border); cursor: pointer; position: relative;
+  transition: border-color 0.15s, transform 0.15s; flex-shrink: 0;
+}
+.overview-thumb:hover { border-color: var(--c1); transform: scale(1.04); }
+.overview-thumb img  { width: 100%; height: 100%; object-fit: cover; object-position: right; }
+.overview-thumb-lbl  {
+  position: absolute; inset: 0; display: flex; align-items: flex-end;
+  padding: 0.35rem 0.45rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 65%);
+  font: 700 0.68rem var(--sans); color: var(--t1);
+}
+.overview-close {
+  position: fixed; top: 1.5rem; right: 2rem; z-index: 401;
+  background: var(--surface); border: 1px solid var(--border); color: var(--t2);
+  border-radius: 8px; padding: 0.35rem 0.9rem; cursor: pointer; font: 400 0.88rem var(--sans);
+}
+
+/* Review words bg */
+.review-bg-words {
+  position: absolute; top: 0; bottom: 0; width: 25%;
+  display: flex; flex-direction: column; justify-content: center; gap: 1.2rem;
+  font: 700 1.6rem var(--mono); color: rgba(255,255,255,0.25);
+  text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+  z-index: 1; pointer-events: none; padding: 0 2rem;
+}
+.review-bg-words.left { left: 0; text-align: left; }
+.review-bg-words.right { right: 0; text-align: right; }
+
+/* Final Slide Words Grid */
+.final-slide { background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 2rem 2rem; }
+.final-bg-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.15; pointer-events: none; z-index: 1; }
+.final-title-area { text-align: center; margin-bottom: 1.5rem; z-index: 10; }
+.final-title-area h2 { font: 900 2.2rem var(--sans); color: var(--t1); margin-bottom: 0.4rem; }
+.final-title-area p { font: 400 1rem var(--sans); color: var(--t2); }
+.final-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem 1.5rem; width: 100%; max-width: 1100px;
+  z-index: 10; flex: 1; align-content: center;
+}
+.final-word-item {
+  display: flex; align-items: center; font-size: 1.1rem;
+  background: rgba(22,25,34,0.8); padding: 0.4rem 0.8rem; border-radius: 8px; border: 1px solid var(--border);
+}
+.final-word-num { color: var(--t3); font-family: var(--mono); width: 2rem; }
+.final-word-en { font-family: var(--mono); font-weight: 700; color: var(--c1); flex: 1; }
+.final-word-pos { color: var(--c2); font-family: var(--mono); font-size: 0.85em; margin: 0 0.6rem; }
+.final-word-zh { color: var(--c3); font-weight: 700; font-family: var(--sans); transition: opacity 0.2s; }
+.final-word-zh.hidden { opacity: 0; }
+
+.toggle-zh-btn {
+  margin-top: 1.5rem; background: var(--c1); color: #000; border: none; font: 700 1rem var(--sans);
+  padding: 0.6rem 1.8rem; border-radius: 999px; cursor: pointer; z-index: 10; transition: transform 0.2s;
+}
+.toggle-zh-btn:hover { transform: scale(1.05); }
+
+/* Student self-study additions */
+.word-heading-row { display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; }
+.word-heading-row .word-en { min-width: 0; overflow-wrap: anywhere; }
+.audio-btn {
+  width: 2rem; height: 2rem; flex: 0 0 auto;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 999px; border: 1px solid #7c9ef880;
+  background: #202941; color: #fff; cursor: pointer;
+  font-size: 1rem; line-height: 1; transition: transform .15s, background .15s;
+}
+.audio-btn:hover, .audio-btn:focus-visible { background: #334778; transform: scale(1.08); outline: none; }
+.audio-btn.is-speaking { background: var(--c3); color: #08130f; }
+.study-controls { display: flex; flex-direction: column; gap: .55rem; }
+.study-label { font: 700 .74rem var(--sans); color: var(--t3); letter-spacing: .08em; }
+.image-tabs { display: flex; flex-wrap: wrap; gap: .35rem; }
+.image-tab, .mastery-btn {
+  border: 1px solid var(--border); background: #1c2030; color: var(--t2);
+  border-radius: 999px; padding: .38rem .68rem; cursor: pointer;
+  font: 700 .76rem var(--sans); transition: border-color .15s, color .15s, background .15s;
+}
+.image-tab:hover, .image-tab.active { border-color: var(--c1); color: var(--t1); background: #253052; }
+.mastery-btn { width: 100%; border-color: #68d9b070; color: var(--c3); }
+.mastery-btn.done { background: #173c32; color: #b9ffe6; border-color: var(--c3); }
+.family-panel { display: flex; flex-direction: column; gap: .45rem; }
+.family-heading { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.family-heading strong { font: 700 .82rem var(--sans); color: var(--t2); }
+.family-heading span { font: 400 .67rem var(--sans); color: var(--t3); }
+.family-words { display: flex; flex-wrap: wrap; gap: .32rem; }
+.family-word {
+  display: inline-flex; align-items: center; gap: .28rem;
+  border: 1px solid #3a4258; background: #131824; color: var(--t1);
+  border-radius: 999px; padding: .28rem .52rem; cursor: pointer;
+  font: 600 .72rem var(--mono);
+}
+.family-word:hover, .family-word:focus-visible { border-color: var(--c3); color: var(--c3); outline: none; }
+.family-word::before { content: '🔊'; font-size: .72rem; }
+.word-image img.study-image { cursor: zoom-in; transition: opacity .16s ease; }
+.word-image img.study-image.is-changing { opacity: .2; }
+.mastery-status { font: 700 .74rem var(--sans); color: var(--c3); white-space: nowrap; }
+.toast {
+  position: fixed; left: 50%; bottom: 62px; z-index: 900; transform: translate(-50%, 12px);
+  background: #eef0f8; color: #10131a; border-radius: 999px; padding: .55rem 1rem;
+  font: 700 .82rem var(--sans); opacity: 0; pointer-events: none; transition: opacity .18s, transform .18s;
+  box-shadow: 0 8px 28px rgba(0,0,0,.38);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (max-width: 760px) {
+  .slide-word { flex-direction: column; }
+  .word-panel { width: 100%; max-height: 48%; padding: .8rem .9rem; gap: .55rem; border-right: 0; border-bottom: 1px solid var(--border); }
+  .word-en { font-size: 1.65rem; }
+  .word-memory { padding: .55rem .7rem; font-size: .78rem; }
+  .word-roots { gap: .25rem; }
+  .root-chip { padding: .22rem .48rem; }
+  .family-word { font-size: .66rem; }
+  .nav { padding: 0 .7rem; }
+  .nav-hint { display: none; }
+  .mastery-status { font-size: .67rem; }
+}
+
+</style>
+</head>
+<body>
+<div class="deck">
+  <div class="progress"><div class="progress-fill" id="prog"></div></div>
+  <div class="slides" id="slides">
+    <section class="slide slide-cover">
+      <div class="cover-title"><em>30 個核心單字</em><br>解鎖更多字根字族</div>
+      <div class="cover-sub">學生自學版｜核心圖 → 構詞拆解 → 字族延伸 → 發音練習</div>
+      <div class="cover-tags">
+        <span class="cover-tag">圖像先行</span>
+        <span class="cover-tag">字根拆解</span>
+        <span class="cover-tag">延伸字族</span>
+        <span class="cover-tag">🔊 點字聽發音</span>
+      </div>
+      <div class="cover-hint">按 [Space] 或 [→] 開始｜單字頁可切換核心圖與延伸圖｜手機可左右滑動</div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-text-overview">
+      <div class="text-overview-title">30 字根語感一覽表 (1-10)</div>
+      <div class="text-overview-grid">
+        
+        <div class="text-overview-item" onclick="gotoId('word-1')">
+          <span class="text-overview-num">1.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">dis</span><span style="color:#f0a868; font-weight:700;">miss</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">away</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">send</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">v.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">解散、開除</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-2')">
+          <span class="text-overview-num">2.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">in</span><span style="color:#f0a868; font-weight:700;">aud</span><span style="color:#68d9b0; font-weight:700;">ible</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">not</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">hear</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#68d9b0">able</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">adj.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">聽不見的</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-3')">
+          <span class="text-overview-num">3.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">super</span><span style="color:#f0a868; font-weight:700;">vise</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">over</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">see</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">v.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">監督、指導</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-4')">
+          <span class="text-overview-num">4.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">intro</span><span style="color:#f0a868; font-weight:700;">spect</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">inward</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">look</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">v.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">內省、省思</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-5')">
+          <span class="text-overview-num">5.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">inter</span><span style="color:#f0a868; font-weight:700;">medi</span><span style="color:#68d9b0; font-weight:700;">ate</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">between</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">middle</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#68d9b0">adj.</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">adj.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">中級的、中間的</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-6')">
+          <span class="text-overview-num">6.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">pre</span><span style="color:#f0a868; font-weight:700;">dict</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">before</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">say</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">v.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">預測、預言</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-7')">
+          <span class="text-overview-num">7.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">pro</span><span style="color:#f0a868; font-weight:700;">pose</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">forward</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">put</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">v.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">提議、求婚</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-8')">
+          <span class="text-overview-num">8.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">per</span><span style="color:#f0a868; font-weight:700;">sist</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">through</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">stand</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">v.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">堅持、持續</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-9')">
+          <span class="text-overview-num">9.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">trans</span><span style="color:#f0a868; font-weight:700;">port</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">across</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">carry</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">v.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">運輸</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-10')">
+          <span class="text-overview-num">10.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">re</span><span style="color:#f0a868; font-weight:700;">ject</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">back</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">throw</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">v.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">拒絕、駁回</span>
+        </div>
+      </div>
+      <div class="notes"></div>
+    </section>
+    <section class="slide slide-text-overview">
+      <div class="text-overview-title">30 字根語感一覽表 (11-20)</div>
+      <div class="text-overview-grid">
+        
+        <div class="text-overview-item" onclick="gotoId('word-11')">
+          <span class="text-overview-num">11.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">sus</span><span style="color:#f0a868; font-weight:700;">tain</span><span style="color:#68d9b0; font-weight:700;">ability</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">under</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">hold</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#68d9b0">能力</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">n.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">永續性</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-12')">
+          <span class="text-overview-num">12.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">anti</span><span style="color:#f0a868; font-weight:700;">gen</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">against</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">produce</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">n.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">抗原</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-13')">
+          <span class="text-overview-num">13.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">con</span><span style="color:#f0a868; font-weight:700;">fer</span><span style="color:#68d9b0; font-weight:700;">ence</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">together</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">bring</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#68d9b0">n.</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">n.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">會議、商談</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-14')">
+          <span class="text-overview-num">14.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">circum</span><span style="color:#f0a868; font-weight:700;">scribe</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">around</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">write</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">v.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">限制</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-15')">
+          <span class="text-overview-num">15.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">auto</span><span style="color:#f0a868; font-weight:700;">bio</span><span style="color:#68d9b0; font-weight:700;">graphy</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">self</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">life</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#68d9b0">write</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">n.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">自傳</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-16')">
+          <span class="text-overview-num">16.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">manu</span><span style="color:#f0a868; font-weight:700;">fac</span><span style="color:#68d9b0; font-weight:700;">ture</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">hand</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">make</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#68d9b0">n.</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">v./n.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">製造</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-17')">
+          <span class="text-overview-num">17.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">de</span><span style="color:#f0a868; font-weight:700;">struct</span><span style="color:#68d9b0; font-weight:700;">ion</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">down</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">build</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#68d9b0">n.</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">n.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">破壞、毀壞</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-18')">
+          <span class="text-overview-num">18.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">psycho</span><span style="color:#f0a868; font-weight:700;">logy</span><span style="color:#68d9b0; font-weight:700;">ist</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">mind</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">study</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#68d9b0">expert</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">n.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">心理學家</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-19')">
+          <span class="text-overview-num">19.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">ir</span><span style="color:#f0a868; font-weight:700;">vers</span><span style="color:#68d9b0; font-weight:700;">ible</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">not</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">turn</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#68d9b0">able</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">adj.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">不可逆的</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-20')">
+          <span class="text-overview-num">20.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">e</span><span style="color:#f0a868; font-weight:700;">vacu</span><span style="color:#68d9b0; font-weight:700;">ate</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">out</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">empty</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#68d9b0">v.</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">v.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">清空、疏散</span>
+        </div>
+      </div>
+      <div class="notes"></div>
+    </section>
+    <section class="slide slide-text-overview">
+      <div class="text-overview-title">30 字根語感一覽表 (21-30)</div>
+      <div class="text-overview-grid">
+        
+        <div class="text-overview-item" onclick="gotoId('word-21')">
+          <span class="text-overview-num">21.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">contra</span><span style="color:#f0a868; font-weight:700;">vene</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">against</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">come</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">v.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">違反</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-22')">
+          <span class="text-overview-num">22.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">se</span><span style="color:#f0a868; font-weight:700;">lect</span><span style="color:#68d9b0; font-weight:700;">ive</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">apart</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">choose</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#68d9b0">adj.</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">adj.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">有選擇性的</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-23')">
+          <span class="text-overview-num">23.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">ab</span><span style="color:#f0a868; font-weight:700;">duct</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">away</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">lead</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">v.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">誘拐、綁架</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-24')">
+          <span class="text-overview-num">24.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">at</span><span style="color:#f0a868; font-weight:700;">tract</span><span style="color:#68d9b0; font-weight:700;">ive</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">to</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">draw</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#68d9b0">adj.</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">adj.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">有吸引力的</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-25')">
+          <span class="text-overview-num">25.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">ne</span><span style="color:#f0a868; font-weight:700;">cess</span><span style="color:#68d9b0; font-weight:700;">ary</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">not</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">go</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#68d9b0">adj.</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">adj.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">必要的</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-26')">
+          <span class="text-overview-num">26.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">dia</span><span style="color:#f0a868; font-weight:700;">gno</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">through</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">know</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">v.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">診斷</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-27')">
+          <span class="text-overview-num">27.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">spir</span><span style="color:#f0a868; font-weight:700;">it</span><span style="color:#68d9b0; font-weight:700;">ual</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">breath</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">go</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#68d9b0">adj.</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">adj.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">精神層面的</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-28')">
+          <span class="text-overview-num">28.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">ob</span><span style="color:#f0a868; font-weight:700;">serve</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">intensive</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">keep</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">v.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">觀察、遵守</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-29')">
+          <span class="text-overview-num">29.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">bene</span><span style="color:#f0a868; font-weight:700;">fit</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">good</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">make</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">v./n.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">益處、好處</span>
+        </div>
+
+        <div class="text-overview-item" onclick="gotoId('word-30')">
+          <span class="text-overview-num">30.</span>
+          <span class="text-overview-word"><span style="color:#7c9ef8; font-weight:700;">in</span><span style="color:#f0a868; font-weight:700;">tens</span><span style="color:#68d9b0; font-weight:700;">ify</span></span>
+          <span style="color:#6070a0; margin:0 8px;">=</span>
+          <span class="text-overview-eq"><span style="color:#7c9ef8">into</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#f0a868">stretch</span><span style="color:#6070a0; margin:0 4px;">+</span><span style="color:#68d9b0">make</span></span>
+          <span style="color:#f0a868; font-family:var(--mono); margin-left:auto; font-size:0.9em;">v.</span>
+          <span style="color:#68d9b0; margin-left:8px; font-weight:600;">加強、強化</span>
+        </div>
+      </div>
+      <div class="notes"></div>
+    </section>
+    <section class="slide slide-word" id="word-1">
+      <div class="word-panel">
+        <div class="word-num">No. 01 / 30</div>
+        <div class="word-en">dismiss<span class="word-pos">v.</span></div>
+        <div class="word-zh">解散、開除</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">dis-</span><span class="root-chip-zh">away分開</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">miss</span><span class="root-chip-zh">send送</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">dis<strong>（分開）</strong>+ miss<strong>（送走）</strong>→ 分開地送走 → 解散、開除</div>
+      </div>
+      <div class="word-image">
+        <img src="images/01_CG_dismiss.png" alt="dismiss" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-2">
+      <div class="word-panel">
+        <div class="word-num">No. 02 / 30</div>
+        <div class="word-en">inaudible<span class="word-pos">adj.</span></div>
+        <div class="word-zh">聽不見的</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">in-</span><span class="root-chip-zh">not不</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">aud</span><span class="root-chip-zh">hear聽</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#68d9b050"><span class="root-chip-en" style="color:#68d9b0">-ible</span><span class="root-chip-zh">able能…的</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">in<strong>（不）</strong>+ aud<strong>（聽）</strong>+ ible<strong>（能…的）</strong>→ 不能被聽到的</div>
+      </div>
+      <div class="word-image">
+        <img src="images/02_CGinaudible.png" alt="inaudible" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-3">
+      <div class="word-panel">
+        <div class="word-num">No. 03 / 30</div>
+        <div class="word-en">supervise<span class="word-pos">v.</span></div>
+        <div class="word-zh">監督、指導</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">super-</span><span class="root-chip-zh">over在上方</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">vise</span><span class="root-chip-zh">see看</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">super<strong>（在上方）</strong>+ vise<strong>（看）</strong>→ 在上方盯著看 → 監督</div>
+      </div>
+      <div class="word-image">
+        <img src="images/03_CG_supervise.png" alt="supervise" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-4">
+      <div class="word-panel">
+        <div class="word-num">No. 04 / 30</div>
+        <div class="word-en">introspect<span class="word-pos">v.</span></div>
+        <div class="word-zh">內省、省思</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">intro-</span><span class="root-chip-zh">inward向內</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">spect</span><span class="root-chip-zh">look看</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">intro<strong>（向內）</strong>+ spect<strong>（看）</strong>→ 往自己心裡看 → 內省</div>
+      </div>
+      <div class="word-image">
+        <img src="images/04_CG_introspect.png" alt="introspect" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-5">
+      <div class="word-panel">
+        <div class="word-num">No. 05 / 30</div>
+        <div class="word-en">intermediate<span class="word-pos">adj.</span></div>
+        <div class="word-zh">中級的、中間的</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">inter-</span><span class="root-chip-zh">between之間</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">med(i)</span><span class="root-chip-zh">middle中間</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#68d9b050"><span class="root-chip-en" style="color:#68d9b0">-ate</span><span class="root-chip-zh">adj.</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">inter<strong>（之間）</strong>+ med<strong>（中間）</strong>+ ate<strong>（形容詞）</strong>→ 夾在中間 → 中級</div>
+      </div>
+      <div class="word-image">
+        <img src="images/05_CG_intermediate.png" alt="intermediate" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-6">
+      <div class="word-panel">
+        <div class="word-num">No. 06 / 30</div>
+        <div class="word-en">predict<span class="word-pos">v.</span></div>
+        <div class="word-zh">預測、預言</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">pre-</span><span class="root-chip-zh">before預先</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">dict</span><span class="root-chip-zh">say說</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">pre<strong>（預先）</strong>+ dict<strong>（說）</strong>→ 事情未發生就先說出來 → 預測</div>
+      </div>
+      <div class="word-image">
+        <img src="images/06CG_predict.png" alt="predict" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-7">
+      <div class="word-panel">
+        <div class="word-num">No. 07 / 30</div>
+        <div class="word-en">propose<span class="word-pos">v.</span></div>
+        <div class="word-zh">提議、求婚</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">pro-</span><span class="root-chip-zh">forward向前</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">pos(e)</span><span class="root-chip-zh">put放</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">pro<strong>（向前）</strong>+ pose<strong>（放）</strong>→ 把想法放到大家面前 → 提議 / 求婚</div>
+      </div>
+      <div class="word-image">
+        <img src="images/07_CG_propose.png" alt="propose" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-8">
+      <div class="word-panel">
+        <div class="word-num">No. 08 / 30</div>
+        <div class="word-en">persist<span class="word-pos">v.</span></div>
+        <div class="word-zh">堅持、持續</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">per-</span><span class="root-chip-zh">through始終</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">sist</span><span class="root-chip-zh">stand站立</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">per<strong>（始終）</strong>+ sist<strong>（站立）</strong>→ 從頭到尾穩穩站著 → 堅持</div>
+      </div>
+      <div class="word-image">
+        <img src="images/08_CC_persist.png" alt="persist" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-9">
+      <div class="word-panel">
+        <div class="word-num">No. 09 / 30</div>
+        <div class="word-en">transport<span class="word-pos">v.</span></div>
+        <div class="word-zh">運輸</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">trans-</span><span class="root-chip-zh">across橫跨</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">port</span><span class="root-chip-zh">carry攜帶</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">trans<strong>（橫跨）</strong>+ port<strong>（攜帶）</strong>→ 橫跨帶過去 → 運輸</div>
+      </div>
+      <div class="word-image">
+        <img src="images/09_CG_transport_students.png" alt="transport" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-10">
+      <div class="word-panel">
+        <div class="word-num">No. 10 / 30</div>
+        <div class="word-en">reject<span class="word-pos">v.</span></div>
+        <div class="word-zh">拒絕、駁回</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">re-</span><span class="root-chip-zh">back向後</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">ject</span><span class="root-chip-zh">throw丟</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">re<strong>（往回）</strong>+ ject<strong>（丟）</strong>→ 把東西往回丟 → 拒絕</div>
+      </div>
+      <div class="word-image">
+        <img src="images/10_CC_reject.png" alt="reject" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-review">
+      <img src="images/CC_all1-10.png" alt="Module 1 Review｜字 1–10" loading="lazy" onclick="openLightbox('images/CC_all1-10.png')" title="點擊放大">
+      <div class="review-overlay">
+        <div class="review-title">Module 1 Review｜字 1–10</div>
+        <div class="review-sub">看圖回想：dis / miss / aud / spect / inter / pre / pro / per / trans / re</div>
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-11">
+      <div class="word-panel">
+        <div class="word-num">No. 11 / 30</div>
+        <div class="word-en">sustainability<span class="word-pos">n.</span></div>
+        <div class="word-zh">永續性</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">sus-</span><span class="root-chip-zh">under下撐住</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">tain</span><span class="root-chip-zh">hold握住</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#68d9b050"><span class="root-chip-en" style="color:#68d9b0">-ability</span><span class="root-chip-zh">能力</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">sus<strong>（在下撐住）</strong>+ tain<strong>（握住）</strong>+ ability<strong>（能力）</strong>→ 在下面撐住地球的能力</div>
+      </div>
+      <div class="word-image">
+        <img src="images/11_CC_sustainability.png" alt="sustainability" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-12">
+      <div class="word-panel">
+        <div class="word-num">No. 12 / 30</div>
+        <div class="word-en">antigen<span class="word-pos">n.</span></div>
+        <div class="word-zh">抗原</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">anti-</span><span class="root-chip-zh">against抗反</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">gen</span><span class="root-chip-zh">produce產生</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">anti<strong>（抗、反）</strong>+ gen<strong>（產生）</strong>→ 引起身體產生對抗反應 → 抗原</div>
+      </div>
+      <div class="word-image">
+        <img src="images/12_CC_antigen.png" alt="antigen" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-13">
+      <div class="word-panel">
+        <div class="word-num">No. 13 / 30</div>
+        <div class="word-en">conference<span class="word-pos">n.</span></div>
+        <div class="word-zh">會議、商談</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">con-</span><span class="root-chip-zh">together一起</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">fer</span><span class="root-chip-zh">bring帶來</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#68d9b050"><span class="root-chip-en" style="color:#68d9b0">-ence</span><span class="root-chip-zh">n.</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">con<strong>（一起）</strong>+ fer<strong>（帶來）</strong>+ ence<strong>（名詞）</strong>→ 大家把意見一起帶來 → 會議</div>
+      </div>
+      <div class="word-image">
+        <img src="images/13_CC_conference.png" alt="conference" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-14">
+      <div class="word-panel">
+        <div class="word-num">No. 14 / 30</div>
+        <div class="word-en">circumscribe<span class="word-pos">v.</span></div>
+        <div class="word-zh">限制</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">circum-</span><span class="root-chip-zh">around周圍</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">scribe</span><span class="root-chip-zh">write畫寫</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">circum<strong>（周圍）</strong>+ scribe<strong>（畫/寫）</strong>→ 在周圍畫一個圈 → 限制</div>
+      </div>
+      <div class="word-image">
+        <img src="images/14_CG_circumscribe_general.png" alt="circumscribe" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-15">
+      <div class="word-panel">
+        <div class="word-num">No. 15 / 30</div>
+        <div class="word-en">autobiography<span class="word-pos">n.</span></div>
+        <div class="word-zh">自傳</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">auto-</span><span class="root-chip-zh">self自己</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">bio</span><span class="root-chip-zh">life生命</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#68d9b050"><span class="root-chip-en" style="color:#68d9b0">graphy</span><span class="root-chip-zh">write寫</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">auto<strong>（自己）</strong>+ bio<strong>（生命）</strong>+ graphy<strong>（寫）</strong>→ 自己寫自己的生命故事</div>
+      </div>
+      <div class="word-image">
+        <img src="images/15_CG_autobiography_general.png" alt="autobiography" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-16">
+      <div class="word-panel">
+        <div class="word-num">No. 16 / 30</div>
+        <div class="word-en">manufacture<span class="word-pos">v./n.</span></div>
+        <div class="word-zh">製造</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">manu-</span><span class="root-chip-zh">hand手</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">fac</span><span class="root-chip-zh">make做</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#68d9b050"><span class="root-chip-en" style="color:#68d9b0">-ture</span><span class="root-chip-zh">n.</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">manu<strong>（手）</strong>+ fac<strong>（做）</strong>+ ture<strong>（名詞）</strong>→ 用手做出來 → 製造</div>
+      </div>
+      <div class="word-image">
+        <img src="images/16_CG_manufacture_general.png" alt="manufacture" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-17">
+      <div class="word-panel">
+        <div class="word-num">No. 17 / 30</div>
+        <div class="word-en">destruction<span class="word-pos">n.</span></div>
+        <div class="word-zh">破壞、毀壞</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">de-</span><span class="root-chip-zh">down往下去除</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">struct</span><span class="root-chip-zh">build建造</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#68d9b050"><span class="root-chip-en" style="color:#68d9b0">-ion</span><span class="root-chip-zh">n.</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">de<strong>（往下）</strong>+ struct<strong>（建造）</strong>+ ion<strong>（名詞）</strong>→ 把建好的東西弄倒</div>
+      </div>
+      <div class="word-image">
+        <img src="images/17_CG_destruction_general.png" alt="destruction" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-18">
+      <div class="word-panel">
+        <div class="word-num">No. 18 / 30</div>
+        <div class="word-en">psychologist<span class="word-pos">n.</span></div>
+        <div class="word-zh">心理學家</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">psycho-</span><span class="root-chip-zh">mind心智</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">log(y)</span><span class="root-chip-zh">study學科</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#68d9b050"><span class="root-chip-en" style="color:#68d9b0">-ist</span><span class="root-chip-zh">expert專家</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">psycho<strong>（心智）</strong>+ logy<strong>（學科）</strong>+ ist<strong>（專家）</strong>→ 研究心理的專家</div>
+      </div>
+      <div class="word-image">
+        <img src="images/18_CGpsychology.png" alt="psychologist" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-19">
+      <div class="word-panel">
+        <div class="word-num">No. 19 / 30</div>
+        <div class="word-en">irreversible<span class="word-pos">adj.</span></div>
+        <div class="word-zh">不可逆的</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">ir-</span><span class="root-chip-zh">not不</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">vers</span><span class="root-chip-zh">turn轉</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#68d9b050"><span class="root-chip-en" style="color:#68d9b0">-ible</span><span class="root-chip-zh">able能…的</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">ir<strong>（不）</strong>+ vers<strong>（轉）</strong>+ ible<strong>（能…的）</strong>→ 無法轉回去的 → 不可逆</div>
+      </div>
+      <div class="word-image">
+        <img src="images/19_GG_irreversible.png" alt="irreversible" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-20">
+      <div class="word-panel">
+        <div class="word-num">No. 20 / 30</div>
+        <div class="word-en">evacuate<span class="word-pos">v.</span></div>
+        <div class="word-zh">清空、疏散</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">e-</span><span class="root-chip-zh">out出去</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">vac(u)</span><span class="root-chip-zh">empty空</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#68d9b050"><span class="root-chip-en" style="color:#68d9b0">-ate</span><span class="root-chip-zh">v.</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">e<strong>（出去）</strong>+ vac<strong>（空）</strong>+ ate<strong>（動詞）</strong>→ 把裡面的人清空送出去 → 疏散</div>
+      </div>
+      <div class="word-image">
+        <img src="images/20_CC_evacuate2.png" alt="evacuate" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-review">
+      <img src="images/CC_all11-20.png" alt="Module 2 Review｜字 11–20" loading="lazy" onclick="openLightbox('images/CC_all11-20.png')" title="點擊放大">
+      <div class="review-overlay">
+        <div class="review-title">Module 2 Review｜字 11–20</div>
+        <div class="review-sub">看圖回想：anti / gen / con / fer / circum / auto / bio / manu / fac / struct</div>
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-21">
+      <div class="word-panel">
+        <div class="word-num">No. 21 / 30</div>
+        <div class="word-en">contravene<span class="word-pos">v.</span></div>
+        <div class="word-zh">違反</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">contra-</span><span class="root-chip-zh">against相反</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">vene</span><span class="root-chip-zh">come來</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">contra<strong>（相反）</strong>+ vene<strong>（來）</strong>→ 反著方向走來 → 違反規定</div>
+      </div>
+      <div class="word-image">
+        <img src="images/21_CC_contravene.png" alt="contravene" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-22">
+      <div class="word-panel">
+        <div class="word-num">No. 22 / 30</div>
+        <div class="word-en">selective<span class="word-pos">adj.</span></div>
+        <div class="word-zh">有選擇性的</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">se-</span><span class="root-chip-zh">apart分開</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">lect</span><span class="root-chip-zh">choose選</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#68d9b050"><span class="root-chip-en" style="color:#68d9b0">-ive</span><span class="root-chip-zh">adj.</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">se<strong>（分開）</strong>+ lect<strong>（選）</strong>+ ive<strong>（形容詞）</strong>→ 精挑細選後分開 → 有選擇性的</div>
+      </div>
+      <div class="word-image">
+        <img src="images/22_CGselective.png" alt="selective" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-23">
+      <div class="word-panel">
+        <div class="word-num">No. 23 / 30</div>
+        <div class="word-en">abduct<span class="word-pos">v.</span></div>
+        <div class="word-zh">誘拐、綁架</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">ab-</span><span class="root-chip-zh">away離開</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">duct</span><span class="root-chip-zh">lead引導</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">ab<strong>（離開）</strong>+ duct<strong>（引導）</strong>→ 把人引導離開 → 誘拐</div>
+      </div>
+      <div class="word-image">
+        <img src="images/23_CGabduct.png" alt="abduct" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-24">
+      <div class="word-panel">
+        <div class="word-num">No. 24 / 30</div>
+        <div class="word-en">attractive<span class="word-pos">adj.</span></div>
+        <div class="word-zh">有吸引力的</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">at-</span><span class="root-chip-zh">to朝向</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">tract</span><span class="root-chip-zh">draw拉</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#68d9b050"><span class="root-chip-en" style="color:#68d9b0">-ive</span><span class="root-chip-zh">adj.</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">at<strong>（朝向）</strong>+ tract<strong>（拉）</strong>+ ive<strong>（形容詞）</strong>→ 把你朝著它拉過去 → 有吸引力的</div>
+      </div>
+      <div class="word-image">
+        <img src="images/24_CGattractive.png" alt="attractive" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-25">
+      <div class="word-panel">
+        <div class="word-num">No. 25 / 30</div>
+        <div class="word-en">necessary<span class="word-pos">adj.</span></div>
+        <div class="word-zh">必要的</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">ne-</span><span class="root-chip-zh">not不</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">cess</span><span class="root-chip-zh">go走</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#68d9b050"><span class="root-chip-en" style="color:#68d9b0">-ary</span><span class="root-chip-zh">adj.</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">ne<strong>（不）</strong>+ cess<strong>（走）</strong>+ ary<strong>（形容詞）</strong>→ 沒有它你就不能走 → 必要的</div>
+      </div>
+      <div class="word-image">
+        <img src="images/25_CGnecessary.png" alt="necessary" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-26">
+      <div class="word-panel">
+        <div class="word-num">No. 26 / 30</div>
+        <div class="word-en">diagnose<span class="word-pos">v.</span></div>
+        <div class="word-zh">診斷</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">dia-</span><span class="root-chip-zh">through穿越</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">gno</span><span class="root-chip-zh">know知道</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">dia<strong>（穿越）</strong>+ gno<strong>（知道）</strong>→ 穿越表象去了解病因 → 診斷</div>
+      </div>
+      <div class="word-image">
+        <img src="images/26_CGdiagnose.png" alt="diagnose" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-27">
+      <div class="word-panel">
+        <div class="word-num">No. 27 / 30</div>
+        <div class="word-en">spiritual<span class="word-pos">adj.</span></div>
+        <div class="word-zh">精神層面的</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">spir</span><span class="root-chip-zh">breath靈魂</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">it</span><span class="root-chip-zh">go走</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#68d9b050"><span class="root-chip-en" style="color:#68d9b0">-ual</span><span class="root-chip-zh">adj.</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">spir<strong>（呼吸/靈魂）</strong>+ it<strong>（走）</strong>+ ual<strong>（形容詞）</strong>→ 靈魂在運行 → 精神的</div>
+      </div>
+      <div class="word-image">
+        <img src="images/27_CGspiritual2.png" alt="spiritual" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-28">
+      <div class="word-panel">
+        <div class="word-num">No. 28 / 30</div>
+        <div class="word-en">observe<span class="word-pos">v.</span></div>
+        <div class="word-zh">觀察、遵守</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">ob-</span><span class="root-chip-zh">intensive加強</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">serve</span><span class="root-chip-zh">keep看守</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">ob<strong>（加強）</strong>+ serve<strong>（看守）</strong>→ 專心地看守 → 觀察 / 遵守</div>
+      </div>
+      <div class="word-image">
+        <img src="images/28_CGobserve.png" alt="observe" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-29">
+      <div class="word-panel">
+        <div class="word-num">No. 29 / 30</div>
+        <div class="word-en">benefit<span class="word-pos">v./n.</span></div>
+        <div class="word-zh">益處、好處</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">bene-</span><span class="root-chip-zh">good好</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">fit</span><span class="root-chip-zh">make做</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">bene<strong>（好）</strong>+ fit<strong>（做）</strong>→ 做出對大家都好的事 → 益處</div>
+      </div>
+      <div class="word-image">
+        <img src="images/29_CGbenefit.png" alt="benefit" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-word" id="word-30">
+      <div class="word-panel">
+        <div class="word-num">No. 30 / 30</div>
+        <div class="word-en">intensify<span class="word-pos">v.</span></div>
+        <div class="word-zh">加強、強化</div>
+        <div class="word-roots"><span class="root-chip" style="border-color:#7c9ef850"><span class="root-chip-en" style="color:#7c9ef8">in-</span><span class="root-chip-zh">into進入</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#f0a86850"><span class="root-chip-en" style="color:#f0a868">tens</span><span class="root-chip-zh">stretch拉緊</span></span><span class="root-sep">+</span><span class="root-chip" style="border-color:#68d9b050"><span class="root-chip-en" style="color:#68d9b0">-ify</span><span class="root-chip-zh">make使…</span></span></div>
+        <div class="word-divider"></div>
+        <div class="word-memory">in<strong>（進入）</strong>+ tens<strong>（拉緊）</strong>+ ify<strong>（使…）</strong>→ 使進入拉緊的極限 → 加強</div>
+      </div>
+      <div class="word-image">
+        <img src="images/30_CGintensify.png" alt="intensify" loading="lazy">
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-review">
+      <img src="images/CC_all21-30.png" alt="Module 3 Review｜字 21–30" loading="lazy" onclick="openLightbox('images/CC_all21-30.png')" title="點擊放大">
+      <div class="review-overlay">
+        <div class="review-title">Module 3 Review｜字 21–30</div>
+        <div class="review-sub">看圖回想：contra / se / lect / ab / tract / ne / cess / dia / spir / tens</div>
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide slide-review">
+      <img src="images/00_CG30.png" alt="Final Boss 總複習" loading="lazy" onclick="openLightbox('images/00_CG30.png')" title="點擊放大">
+      <div class="review-overlay">
+        <div class="review-title">Final Boss 總複習</div>
+        <div class="review-sub">30 個字根 → 打開 15,000 個單字的大門！</div>
+      </div>
+      <div class="notes"></div>
+    </section>
+
+    <section class="slide final-slide" id="final-slide">
+      <div class="final-title-area">
+        <h2>30 個字根清單</h2>
+        <p>掌握這 30 把鑰匙，開啟字彙語感大門</p>
+        <button class="toggle-zh-btn" onclick="toggleFinalZh()">隱藏 / 顯示中文</button>
+      </div>
+      <div class="final-grid" id="final-grid">
+        <!-- JS generates 30 words here -->
+      </div>
+      <div class="notes"></div>
+    </section>
+
+  </div><!-- /slides -->
+</div>
+
+<div class="nav">
+  <span class="nav-counter" id="counter">1 / 38</span>
+  <span class="mastery-status" id="mastery-status">已學會 0 / 30</span>
+  <div class="nav-arrows">
+    <button class="nav-btn" id="btn-prev">← Prev</button>
+    <button class="nav-btn" id="btn-next">Next →</button>
+  </div>
+  <span class="nav-hint">[←][→] 翻頁｜[O] 總覽｜[F] 全螢幕</span>
+</div>
+
+
+
+<div class="overview-panel" id="overview">
+  <button class="overview-close" onclick="document.getElementById('overview').classList.remove('open')">✕ 關閉</button>
+  <div class="overview-thumb" onclick="gotoFromOverview(0)"><div class="overview-thumb-lbl">1. 封面</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(1)"><div class="overview-thumb-lbl">2. 30字總覽 (1-10)</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(2)"><div class="overview-thumb-lbl">3. 30字總覽 (11-20)</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(3)"><div class="overview-thumb-lbl">4. 30字總覽 (21-30)</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(4)"><img src="images/01_CG_dismiss.png" alt="dismiss"><div class="overview-thumb-lbl">5. dismiss</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(5)"><img src="images/02_CGinaudible.png" alt="inaudible"><div class="overview-thumb-lbl">6. inaudible</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(6)"><img src="images/03_CG_supervise.png" alt="supervise"><div class="overview-thumb-lbl">7. supervise</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(7)"><img src="images/04_CG_introspect.png" alt="introspect"><div class="overview-thumb-lbl">8. introspect</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(8)"><img src="images/05_CG_intermediate.png" alt="intermediate"><div class="overview-thumb-lbl">9. intermediate</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(9)"><img src="images/06CG_predict.png" alt="predict"><div class="overview-thumb-lbl">10. predict</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(10)"><img src="images/07_CG_propose.png" alt="propose"><div class="overview-thumb-lbl">11. propose</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(11)"><img src="images/08_CC_persist.png" alt="persist"><div class="overview-thumb-lbl">12. persist</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(12)"><img src="images/09_CG_transport_students.png" alt="transport"><div class="overview-thumb-lbl">13. transport</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(13)"><img src="images/10_CC_reject.png" alt="reject"><div class="overview-thumb-lbl">14. reject</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(14)"><img src="images/CC_all1-10.png" alt="Review 1–10"><div class="overview-thumb-lbl">15. Review 1–10</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(15)"><img src="images/11_CC_sustainability.png" alt="sustainability"><div class="overview-thumb-lbl">16. sustainability</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(16)"><img src="images/12_CC_antigen.png" alt="antigen"><div class="overview-thumb-lbl">17. antigen</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(17)"><img src="images/13_CC_conference.png" alt="conference"><div class="overview-thumb-lbl">18. conference</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(18)"><img src="images/14_CG_circumscribe_general.png" alt="circumscribe"><div class="overview-thumb-lbl">19. circumscribe</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(19)"><img src="images/15_CG_autobiography_general.png" alt="autobiography"><div class="overview-thumb-lbl">20. autobiography</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(20)"><img src="images/16_CG_manufacture_general.png" alt="manufacture"><div class="overview-thumb-lbl">21. manufacture</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(21)"><img src="images/17_CG_destruction_general.png" alt="destruction"><div class="overview-thumb-lbl">22. destruction</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(22)"><img src="images/18_CGpsychology.png" alt="psychologist"><div class="overview-thumb-lbl">23. psychologist</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(23)"><img src="images/19_GG_irreversible.png" alt="irreversible"><div class="overview-thumb-lbl">24. irreversible</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(24)"><img src="images/20_CC_evacuate2.png" alt="evacuate"><div class="overview-thumb-lbl">25. evacuate</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(25)"><img src="images/CC_all11-20.png" alt="Review 11–20"><div class="overview-thumb-lbl">26. Review 11–20</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(26)"><img src="images/21_CC_contravene.png" alt="contravene"><div class="overview-thumb-lbl">27. contravene</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(27)"><img src="images/22_CGselective.png" alt="selective"><div class="overview-thumb-lbl">28. selective</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(28)"><img src="images/23_CGabduct.png" alt="abduct"><div class="overview-thumb-lbl">29. abduct</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(29)"><img src="images/24_CGattractive.png" alt="attractive"><div class="overview-thumb-lbl">30. attractive</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(30)"><img src="images/25_CGnecessary.png" alt="necessary"><div class="overview-thumb-lbl">31. necessary</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(31)"><img src="images/26_CGdiagnose.png" alt="diagnose"><div class="overview-thumb-lbl">32. diagnose</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(32)"><img src="images/27_CGspiritual2.png" alt="spiritual"><div class="overview-thumb-lbl">33. spiritual</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(33)"><img src="images/28_CGobserve.png" alt="observe"><div class="overview-thumb-lbl">34. observe</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(34)"><img src="images/29_CGbenefit.png" alt="benefit"><div class="overview-thumb-lbl">35. benefit</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(35)"><img src="images/30_CGintensify.png" alt="intensify"><div class="overview-thumb-lbl">36. intensify</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(36)"><img src="images/CC_all21-30.png" alt="Review 21–30"><div class="overview-thumb-lbl">37. Review 21–30</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(37)"><img src="images/00_CG30.png" alt="Final Review"><div class="overview-thumb-lbl">38. Final Review</div></div>
+  <div class="overview-thumb" onclick="gotoFromOverview(38)"><div style="background:#161922;width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#7c9ef8;font-weight:bold;">30 Words</div><div class="overview-thumb-lbl">39. 30字清單</div></div>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="Full size">
+</div>
+
+<script>
+window.openLightbox = function(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+};
+window.closeLightbox = function() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lightbox-img').src = '';
+};
+
+(function() {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total  = slides.length;
+  const prog   = document.getElementById('prog');
+  const ctr    = document.getElementById('counter');
+  let cur = 0;
+
+  function goto(n) {
+    slides[cur].classList.remove('is-active');
+    slides[cur].classList.add('is-prev');
+    cur = Math.max(0, Math.min(n, total - 1));
+    slides[cur].classList.add('is-active');
+    setTimeout(() => slides.forEach((s,i) => { if (i !== cur) s.classList.remove('is-prev'); }), 400);
+    prog.style.width = (cur / (total - 1) * 100) + '%';
+    ctr.textContent = (cur + 1) + ' / ' + total;
+  }
+
+  window.gotoId = function(id) {
+    const target = document.getElementById(id);
+    if (target) {
+      const idx = slides.indexOf(target);
+      if (idx !== -1) goto(idx);
+    }
+  };
+
+  window.gotoFromOverview = function(n) {
+    document.getElementById('overview').classList.remove('open');
+    goto(n);
+  };
+
+  slides[0].classList.add('is-active');
+
+  document.getElementById('btn-prev').onclick = () => goto(cur - 1);
+  document.getElementById('btn-next').onclick = () => goto(cur + 1);
+
+  document.addEventListener('keydown', e => {
+    if (document.getElementById('lightbox').classList.contains('open') && e.key === 'Escape') {
+      window.closeLightbox();
+      return;
+    }
+    if (['ArrowRight','Space','PageDown'].includes(e.key)) { e.preventDefault(); goto(cur + 1); }
+    else if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); goto(cur - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); goto(0); }
+    else if (e.key === 'End')  { e.preventDefault(); goto(total - 1); }
+    else if (e.key === 'f' || e.key === 'F') { document.documentElement.requestFullscreen?.(); }
+    else if (e.key === 'o' || e.key === 'O') { document.getElementById('overview').classList.toggle('open'); }
+    
+    else if (e.key === 'Escape') { document.getElementById('overview').classList.remove('open'); }
+
+  });
+
+  const m = location.hash.match(/#\/(\d+)/);
+  if (m) goto(parseInt(m[1]) - 1);
+})();
+</script>
+
+<!-- Inject Review Backgrounds & Final Grid -->
+<script>
+(function(){
+  const overviewItems = document.querySelectorAll('.slide-text-overview .text-overview-item');
+  const wordsData = Array.from(overviewItems).map(item => {
+    const num = item.querySelector('.text-overview-num').textContent.trim();
+    const word = item.querySelector('.text-overview-word').textContent.trim();
+    const spans = item.querySelectorAll('span');
+    const zh = spans[spans.length - 1].textContent.trim();
+    let pos = spans[spans.length - 2].textContent.trim();
+    pos = '(' + pos.replace(/\./g, '') + ')';
+    return { num, word, pos, zh };
+  });
+
+  // Inject into Final Grid
+  const finalGrid = document.getElementById('final-grid');
+  if (finalGrid) {
+    wordsData.forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'final-word-item';
+      el.innerHTML = `<span class="final-word-num">${d.num}</span>
+                      <span class="final-word-en">${d.word}</span>
+                      <span class="final-word-pos">${d.pos}</span>
+                      <span class="final-word-zh final-zh-text hidden">${d.zh}</span>`;
+      finalGrid.appendChild(el);
+    });
+  }
+
+  // Inject into Review Slides (Module 1, 2, 3)
+  const reviewSlides = document.querySelectorAll('.slide-review:not(.final-slide)');
+  for(let i = 0; i < 3; i++) {
+    if (!reviewSlides[i]) break;
+    const startIndex = i * 10;
+    const leftWords = wordsData.slice(startIndex, startIndex + 5);
+    const rightWords = wordsData.slice(startIndex + 5, startIndex + 10);
+    
+    const leftDiv = document.createElement('div');
+    leftDiv.className = 'review-bg-words left';
+    leftDiv.innerHTML = leftWords.map(d => `<div>${d.num} ${d.word}</div>`).join('');
+    
+    const rightDiv = document.createElement('div');
+    rightDiv.className = 'review-bg-words right';
+    rightDiv.innerHTML = rightWords.map(d => `<div>${d.num} ${d.word}</div>`).join('');
+    
+    reviewSlides[i].appendChild(leftDiv);
+    reviewSlides[i].appendChild(rightDiv);
+  }
+
+  // Toggle Function
+  window.toggleFinalZh = function() {
+    document.querySelectorAll('.final-zh-text').forEach(el => el.classList.toggle('hidden'));
+  };
+})();
+</script>
+<div class="toast" id="study-toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  function optimizedAsset(src) {
+    return String(src || '').replace(/\.png($|\?)/i, '.webp$1');
+  }
+  document.querySelectorAll('img[src$=".png"]').forEach(img => {
+    img.src = optimizedAsset(img.getAttribute('src'));
+  });
+  const openOriginal = window.openLightbox;
+  window.openLightbox = function (src) { openOriginal(optimizedAsset(src)); };
+
+  const content = {
+    1: { images: ['01_CGmit3.png'], words: ['emit','submit','admit','permit','omit','transmit'] },
+    2: { images: ['2_CGaudi.png'], words: ['audio','auditorium','audience','audition','inaudible','audible','auditor','audit'] },
+    3: { images: ['3_CGvis.png'], words: ['preview','vivid','visit','vision','invisible','evident','visible','revise','review'] },
+    4: { images: ['4_CG_spect.png'], words: ['inspect','expect','suspect','respect','prospect','special','perspective','spectacular'] },
+    5: { images: ['5_CG_inter.png'], words: ['interview','interact','international','interrupt'] },
+    6: { images: ['6_CG_pre.png'], words: ['predict','prevent','prefer','preserve','previous'] },
+    7: { images: ['7_CG_pose.png','7_CG_posit.png'], words: ['compose','expose','oppose','suppose','purpose','propose','impose','dispose','position','preposition','deposit','positive'] },
+    8: { images: ['8_CG_sist_列表.png','8_CG_sist2.png'], words: ['insist','persist','resist','assist','consist','exist'] },
+    9: { images: ['9_CG_port.png'], words: ['portable','transport','export','import','report','support','port','multiport'] },
+    10: { images: ['10_CGject.png'], words: ['project','inject','eject','subject','object'] },
+    11: { images: ['11_CG_tain5.png','11_CG_tainvsten多.png'], words: ['entertain','contain','obtain','retain','maintain','abstain','content','continent','continue','detain','attain','pertain','sustain','tenacious','tenant','tenet','tenure','tense','tension','tend','tendency','extend','extent','extension','extensive','intense','intensify','intensity','intensive','intend','intent','intention','attend','attendance','attendant','attention','pretend','contend'] },
+    12: { images: ['12_CG_gen.png'], words: ['generate','gene','genetic','genius','generation','origin'] },
+    13: { images: ['13_CG_fer.png'], words: ['prefer','differ','offer','suffer','transfer','refer','fertile','interfere'] },
+    14: { images: ['14_CG_scribe.png'], words: ['describe','prescribe','inscribe','subscribe','manuscript','postscript'] },
+    15: { images: ['15_CG_autobiography_化.png'], words: ['autobiography','automobile','autograph','automated','biochemical','biosphere','biotechnology','biography','calligraphy','geography','paragraph','photograph','antibiotic','biofuel','chromatography','graphite'] },
+    16: { images: ['16_CG_man.png','16_CG_factfect.png'], words: ['manage','manual','manipulate','maintain','manner','manufacture','manipulation','maintenance','mankind','factory','facility','perfect','infect','affect','effect','defect','effective','ineffective','defective','beneficial','sufficient','satisfy','clarify'] },
+    17: { images: ['17_CG_struct.png'], words: ['instruction','construction','structure','destructive'] },
+    18: { images: ['18_CG_ology.png'], words: ['astrology','microbiology','sociology','metrology','zoology','psychopharmacology'] },
+    19: { images: ['19_CG_vert.png'], words: ['reverse','convert','divorce','diverse','controversy','extroverted','introvert','anniversary','universe','perverse','subvert','inverted','avert','advertisement','conversation'] },
+    20: { images: ['20_CG_e_列表.png','20_CG_vac.png'], words: ['export','expect','expose','explore','exist','emit','emission','evaluate','educate','elect','effect','efficient','efficiency','vacant','vacancy','vacation','evacuate'] },
+    21: { images: ['21_CG_counter.png','21_CG_vene.png'], words: ['contrast','contrary','contradict','controversial','counterattack','counterpart','encounter','prevent','event','invent','advent','adventure','convenient','convention','contravention','intervention','venue','avenue','revenue'] },
+    22: { images: ['22_CG_seve2.png','22_CG_lectopt.png'], words: ['sever','several','severe','server','separate','segregate','secrete','seduce','section','bisect','insect','intersection','select','elect','collect','neglect','adopt','option','optional'] },
+    23: { images: ['23_CG_ab.png','23_CGduce3.png'], words: ['abnormal','absence','absent','abuse','abandon','absolutely','reduce','produce','deduce','induce','introduce','conduct'] },
+    24: { images: ['24_CG_ad2.png','24_CGtract.png'], words: ['adapt','adopt','acknowledge','accustom','addict','allocate','appoint','approach','assist','attract','attractive','attraction','extract','contract','contractor','contraction','distract','distraction','subtract','detract','abstract','tractor','traction','tract','retract','protract','tractable','intractable'] },
+    25: { images: ['25_CG_cess.png'], words: ['necessary','access','process','succeed','successful','exceed'] },
+    26: { images: ['26_CG_dia_gno.png'], words: ['dialogue','diameter','diagram','diarrhea','diagnose','ignore','ignorance','recognize'] },
+    27: { images: ['27_CG_it.png'], words: ['spirit','itinerary','ambition','audition','circuit','transit','exit','enter','ambitious'] },
+    28: { images: ['28_CG_ob.png'], words: ['obstruct','obstacle','oppose','opponent','observe','obtain'] },
+    29: { images: ['29_CG_fic.png'], words: ['efficient','sufficient','proficient','artificial','sacrifice','fiction','significant','deficiency','magnificent','certificate'] },
+    30: { images: ['30_CGtend.png'], words: ['tend','extend','attend','intend','pretend','extensive','intensive'] }
+  };
+
+  const STORAGE_KEY = 'root-deck-student-progress-v1';
+  let saved = { mastered: [], lastWord: '' };
+  try { saved = Object.assign(saved, JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')); } catch (_) {}
+  const mastered = new Set(saved.mastered || []);
+  const toast = document.getElementById('study-toast');
+  let toastTimer;
+
+  function save() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ mastered: Array.from(mastered), lastWord: saved.lastWord || '' }));
+    const status = document.getElementById('mastery-status');
+    if (status) status.textContent = `已學會 ${mastered.size} / 30`;
+  }
+
+  function showToast(text) {
+    toast.textContent = text;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 1300);
+  }
+
+  function chooseVoice() {
+    const voices = speechSynthesis.getVoices();
+    return voices.find(v => /^en-US/i.test(v.lang)) || voices.find(v => /^en/i.test(v.lang)) || null;
+  }
+
+  window.speakEnglish = function (word, button) {
+    if (!('speechSynthesis' in window)) { showToast('此瀏覽器不支援語音播放'); return; }
+    speechSynthesis.cancel();
+    document.querySelectorAll('.is-speaking').forEach(el => el.classList.remove('is-speaking'));
+    const utterance = new SpeechSynthesisUtterance(word);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.82;
+    utterance.pitch = 1;
+    const voice = chooseVoice();
+    if (voice) utterance.voice = voice;
+    if (button) button.classList.add('is-speaking');
+    utterance.onend = utterance.onerror = () => button && button.classList.remove('is-speaking');
+    speechSynthesis.speak(utterance);
+  };
+
+  document.querySelectorAll('.slide-word').forEach((slide, index) => {
+    const number = index + 1;
+    const unit = content[number];
+    if (!unit) return;
+    const panel = slide.querySelector('.word-panel');
+    const title = slide.querySelector('.word-en');
+    const word = title.childNodes[0].textContent.trim();
+    const pos = title.querySelector('.word-pos');
+    const row = document.createElement('div');
+    row.className = 'word-heading-row';
+    title.parentNode.insertBefore(row, title);
+    row.appendChild(title);
+    const speaker = document.createElement('button');
+    speaker.className = 'audio-btn';
+    speaker.type = 'button';
+    speaker.setAttribute('aria-label', `播放 ${word} 的英文發音`);
+    speaker.title = `播放 ${word}`;
+    speaker.textContent = '🔊';
+    speaker.onclick = () => speakEnglish(word, speaker);
+    if (pos) title.insertBefore(speaker, pos);
+    else title.appendChild(speaker);
+
+    const imageBox = slide.querySelector('.word-image');
+    const image = imageBox.querySelector('img');
+    image.classList.add('study-image');
+    const coreSrc = image.getAttribute('src');
+    const tabs = [{ label: '核心圖', src: coreSrc }].concat(unit.images.map((name, i) => ({ label: unit.images.length > 1 ? `字族圖 ${i + 1}` : '字族延伸圖', src: `extensions/${name}` })));
+
+    const controls = document.createElement('div');
+    controls.className = 'study-controls';
+    controls.innerHTML = '<div class="word-divider"></div><div class="study-label">切換學習圖片</div>';
+    const tabRow = document.createElement('div');
+    tabRow.className = 'image-tabs';
+    tabs.forEach((tab, tabIndex) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'image-tab' + (tabIndex === 0 ? ' active' : '');
+      button.textContent = tab.label;
+      button.onclick = () => {
+        tabRow.querySelectorAll('.image-tab').forEach(b => b.classList.remove('active'));
+        button.classList.add('active');
+        image.classList.add('is-changing');
+        setTimeout(() => { image.src = optimizedAsset(tab.src); image.alt = `${word}｜${tab.label}`; image.classList.remove('is-changing'); }, 90);
+      };
+      tabRow.appendChild(button);
+    });
+    controls.appendChild(tabRow);
+
+    const family = document.createElement('div');
+    family.className = 'family-panel';
+    family.innerHTML = '<div class="family-heading"><strong>字族發音練習</strong><span>點單字聽念法</span></div>';
+    const wordList = document.createElement('div');
+    wordList.className = 'family-words';
+    unit.words.forEach(familyWord => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'family-word';
+      button.textContent = familyWord;
+      button.setAttribute('aria-label', `播放 ${familyWord} 的英文發音`);
+      button.onclick = () => speakEnglish(familyWord, button);
+      wordList.appendChild(button);
+    });
+    family.appendChild(wordList);
+    controls.appendChild(family);
+
+    const mastery = document.createElement('button');
+    mastery.type = 'button';
+    mastery.className = 'mastery-btn';
+    const updateMastery = () => {
+      const done = mastered.has(slide.id);
+      mastery.classList.toggle('done', done);
+      mastery.textContent = done ? '✓ 已學會（點擊取消）' : '標記為已學會';
+    };
+    mastery.onclick = () => {
+      if (mastered.has(slide.id)) mastered.delete(slide.id); else mastered.add(slide.id);
+      updateMastery(); save(); showToast(mastered.has(slide.id) ? `${word} 已完成` : `${word} 已取消完成`);
+    };
+    updateMastery();
+    controls.appendChild(mastery);
+    panel.appendChild(controls);
+
+    image.onclick = () => openLightbox(image.src);
+    image.title = '點擊放大目前圖片';
+  });
+
+  document.querySelectorAll('.final-word-item').forEach(item => {
+    const wordEl = item.querySelector('.final-word-en');
+    if (!wordEl) return;
+    const button = document.createElement('button');
+    button.type = 'button'; button.className = 'audio-btn'; button.textContent = '🔊';
+    button.style.width = '1.65rem'; button.style.height = '1.65rem'; button.style.fontSize = '.78rem';
+    button.setAttribute('aria-label', `播放 ${wordEl.textContent.trim()} 的英文發音`);
+    button.onclick = () => speakEnglish(wordEl.textContent.trim(), button);
+    item.insertBefore(button, item.querySelector('.final-word-pos'));
+  });
+
+  const observer = new MutationObserver(() => {
+    const active = document.querySelector('.slide.is-active[id^="word-"]');
+    if (active) { saved.lastWord = active.id; save(); }
+  });
+  observer.observe(document.getElementById('slides'), { subtree: true, attributes: true, attributeFilter: ['class'] });
+  save();
+  if (saved.lastWord && document.getElementById(saved.lastWord)) setTimeout(() => gotoId(saved.lastWord), 0);
+
+  let touchStartX = null;
+  document.getElementById('slides').addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+  document.getElementById('slides').addEventListener('touchend', e => {
+    if (touchStartX === null || document.getElementById('lightbox').classList.contains('open')) return;
+    const delta = e.changedTouches[0].clientX - touchStartX;
+    touchStartX = null;
+    if (Math.abs(delta) < 70) return;
+    document.getElementById(delta < 0 ? 'btn-next' : 'btn-prev').click();
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>
