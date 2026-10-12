@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sustainability｜30 核心單字學生自學單元</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;900&family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  background: #0d0f14;
+  color: #eef0f8;
+  font-family: 'Inter', 'Noto Sans TC', -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+:root {
+  --bg:        #0d0f14;
+  --surface:   #161922;
+  --surface-2: #1e2230;
+  --border:    #2a2f3e;
+  --border-light: #3d445a;
+  --c1: #7c9ef8; /* 藍/sus */
+  --c2: #f0a868; /* 橙/tain */
+  --c3: #68d9b0; /* 綠/ability */
+  --c4: #e070c0; /* 紫 */
+  --t1: #eef0f8;
+  --t2: #a8b0c8;
+  --t3: #6b779a;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Inter', 'Noto Sans TC', sans-serif;
+}
+
+/* App Layout */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Top Navigation Bar */
+.top-nav {
+  flex-shrink: 0;
+  height: 54px;
+  background: rgba(16, 19, 27, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.25rem;
+  z-index: 100;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, #2b3964, #19223c);
+  color: var(--c1);
+  border: 1px solid #7c9ef850;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.lesson-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--t1);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lesson-tag {
+  background: #1c2720;
+  color: var(--c3);
+  border: 1px solid #68d9b040;
+  font-size: 0.72rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.nav-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--t2);
+  border-radius: 8px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.15s ease;
+  font-family: var(--sans);
+}
+
+.nav-btn:hover {
+  background: var(--surface-2);
+  color: var(--t1);
+  border-color: var(--border-light);
+}
+
+/* Main Workspace */
+.main-layout {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Left Study Panel */
+.study-panel {
+  width: 440px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  gap: 1.1rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+/* Unit Header */
+.unit-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.unit-number {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--c1);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.mastery-indicator {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--t3);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.mastery-indicator.is-done {
+  color: var(--c3);
+}
+
+/* Target Word */
+.word-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.word-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.word-text {
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  line-height: 1.1;
+}
+
+.word-pos {
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--c2);
+  background: #2a2015;
+  border: 1px solid #f0a86840;
+  padding: 0.1rem 0.5rem;
+  border-radius: 4px;
+}
+
+.word-audio-btn {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  border: 1px solid #7c9ef880;
+  background: #202941;
+  color: #fff;
+  font-size: 1.05rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.word-audio-btn:hover {
+  background: #324474;
+  transform: scale(1.08);
+}
+
+.word-audio-btn.is-speaking {
+  background: var(--c3);
+  color: #0d1218;
+  transform: scale(1.1);
+  box-shadow: 0 0 16px rgba(104, 217, 176, 0.6);
+}
+
+.word-zh-def {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--c3);
+  letter-spacing: 0.02em;
+}
+
+/* Root Breakdown Chips */
+.roots-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.block-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--t3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.roots-cluster {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.root-chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  background: #1a1e2b;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.75rem;
+  text-align: center;
+  min-width: 75px;
+}
+
+.root-chip-en {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.root-chip-zh {
+  font-size: 0.72rem;
+  color: var(--t2);
+  margin-top: 0.15rem;
+}
+
+.root-plus {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--t3);
+}
+
+/* Memory Formula Box */
+.memory-box {
+  background: #171b26;
+  border-left: 4px solid var(--c2);
+  border-radius: 0 8px 8px 0;
+  padding: 0.85rem 1rem;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--t2);
+}
+
+.memory-box strong {
+  color: var(--c2);
+  font-weight: 700;
+}
+
+.memory-box em {
+  font-style: normal;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Tabs for View Switching */
+.tabs-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tabs-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
+}
+
+.tab-btn {
+  background: #1c2030;
+  border: 1px solid var(--border);
+  color: var(--t2);
+  border-radius: 8px;
+  padding: 0.5rem 0.4rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+  white-space: nowrap;
+  font-family: var(--sans);
+}
+
+.tab-btn:hover {
+  background: #252c42;
+  color: var(--t1);
+  border-color: var(--c1);
+}
+
+.tab-btn.active {
+  background: #23345c;
+  color: #ffffff;
+  border-color: var(--c1);
+  box-shadow: 0 0 12px rgba(124, 158, 248, 0.25);
+}
+
+/* Family Words Pronunciation section */
+.family-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  background: #12151d;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.9rem;
+}
+
+.family-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.family-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--t1);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.family-count {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--c1);
+  background: #1b243d;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+}
+
+.family-hint {
+  font-size: 0.7rem;
+  color: var(--t3);
+}
+
+.family-search {
+  width: 100%;
+  background: #181c28;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.35rem 0.6rem;
+  color: #fff;
+  font-size: 0.76rem;
+  outline: none;
+  font-family: var(--sans);
+}
+
+.family-search:focus {
+  border-color: var(--c1);
+}
+
+.family-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.family-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  background: #171c28;
+  border: 1px solid #333a4f;
+  color: var(--t1);
+  border-radius: 999px;
+  padding: 0.25rem 0.55rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.family-chip::before {
+  content: "🔊";
+  font-size: 0.68rem;
+  opacity: 0.8;
+}
+
+.family-chip:hover {
+  border-color: var(--c3);
+  color: var(--c3);
+  background: #152520;
+}
+
+.family-chip.is-speaking {
+  background: var(--c3);
+  color: #0b1310;
+  border-color: var(--c3);
+}
+
+/* Mastery Button */
+.mastery-btn {
+  width: 100%;
+  background: #182522;
+  border: 1px solid #68d9b060;
+  color: var(--c3);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.7rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  font-family: var(--sans);
+}
+
+.mastery-btn:hover {
+  background: #1d332d;
+  border-color: var(--c3);
+}
+
+.mastery-btn.done {
+  background: #1f4a3e;
+  color: #afffe4;
+  border-color: #68d9b0;
+  box-shadow: 0 0 14px rgba(104, 217, 176, 0.25);
+}
+
+/* Pedagogical Info Box (教案競賽參考) */
+.pedagogy-note {
+  background: #141722;
+  border: 1px dashed var(--border-light);
+  border-radius: 8px;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.74rem;
+  line-height: 1.55;
+  color: var(--t3);
+}
+
+.pedagogy-note strong {
+  color: var(--c1);
+}
+
+/* Right Stage Display Area */
+.stage-area {
+  flex: 1;
+  background: #090b0f;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.stage-header {
+  position: absolute;
+  top: 1rem;
+  left: 1.25rem;
+  right: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.stage-badge {
+  background: rgba(16, 20, 30, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--t2);
+  pointer-events: all;
+}
+
+.stage-hint {
+  background: rgba(16, 20, 30, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  color: var(--t3);
+  font-family: var(--mono);
+}
+
+.stage-canvas {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem 1.5rem;
+  cursor: zoom-in;
+  position: relative;
+}
+
+.stage-image {
+  max-width: 96%;
+  max-height: 86vh;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  transition: opacity 0.16s ease, transform 0.2s ease;
+}
+
+.stage-image.is-changing {
+  opacity: 0.2;
+}
+
+.stage-image:hover {
+  transform: scale(1.008);
+}
+
+/* Lightbox Modal */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 7, 10, 0.94);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  cursor: zoom-out;
+}
+
+.lightbox.open {
+  display: flex;
+}
+
+.lightbox-img {
+  max-width: 96vw;
+  max-height: 94vh;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: #1c2030;
+  border: 1px solid var(--border);
+  color: #fff;
+  border-radius: 50%;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #eef0f8;
+  color: #0d0f14;
+  padding: 0.55rem 1.2rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s ease;
+  z-index: 2000;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Responsive adjustments */
+@media (max-width: 960px) {
+  .app-container { height: auto; min-height: 100vh; overflow-y: auto; }
+  .main-layout { flex-direction: column; overflow: visible; }
+  .study-panel { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+  .stage-area { min-height: 520px; }
+  .stage-image { max-height: 60vh; }
+}
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- Top Bar -->
+  <header class="top-nav">
+    <div class="brand-section">
+      <span class="brand-badge">CORE 11 / 30</span>
+      <h1 class="lesson-title">
+        字根字族自主學習展示單元
+        <span class="lesson-tag">教案競賽參考範例</span>
+      </h1>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-btn" id="btn-fullscreen" title="全螢幕切換">⛶ 全螢幕</button>
+      <a class="nav-btn" href="https://t508-ksvs.github.io/30-core-word-student-self-study/" target="_blank" rel="noopener" title="前往 30 核心字完整版">📚 30字總覽</a>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="main-layout">
+    <!-- Left Study Panel -->
+    <aside class="study-panel">
+      <!-- Unit Meta -->
+      <div class="unit-meta">
+        <span class="unit-number">UNIT 11 · CORE WORD</span>
+        <span class="mastery-indicator" id="mastery-indicator">
+          <span>●</span> <span id="mastery-text">未標記學習</span>
+        </span>
+      </div>
+
+      <!-- Target Word Title -->
+      <div class="word-hero">
+        <div class="word-row">
+          <span class="word-text">sustainability</span>
+          <span class="word-pos">n.</span>
+          <button class="word-audio-btn" id="btn-speak-core" type="button" aria-label="播放 sustainability 發音" title="播放 sustainability 發音">🔊</button>
+        </div>
+        <div class="word-zh-def">永續性、可持續性</div>
+      </div>
+
+      <!-- Roots Breakdown -->
+      <div class="roots-block">
+        <div class="block-title">字根構詞解析 (Morphological Analysis)</div>
+        <div class="roots-cluster">
+          <div class="root-chip" style="border-color: #7c9ef850;">
+            <span class="root-chip-en" style="color: var(--c1);">sus-</span>
+            <span class="root-chip-zh">under 下 / 撐住</span>
+          </div>
+          <span class="root-plus">+</span>
+          <div class="root-chip" style="border-color: #f0a86850;">
+            <span class="root-chip-en" style="color: var(--c2);">tain</span>
+            <span class="root-chip-zh">hold 握住 / 支撐</span>
+          </div>
+          <span class="root-plus">+</span>
+          <div class="root-chip" style="border-color: #68d9b050;">
+            <span class="root-chip-en" style="color: var(--c3);">-ability</span>
+            <span class="root-chip-zh">名詞字尾：能力</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Memory Box -->
+      <div class="memory-box">
+        <strong>構詞心智圖解：</strong><br>
+        <strong>sus</strong>（在下撐住）+ <strong>tain</strong>（握住支撐）+ <strong>ability</strong>（能力）<br>
+        ➔ <em>在下方穩固撐住地球資源的能力</em> ➔ <strong>永續性</strong>
+      </div>
+
+      <!-- Image Selector Tabs -->
+      <div class="tabs-block">
+        <div class="block-title">切換教學圖資 (Visual Anchor)</div>
+        <div class="tabs-row" id="tabs-container">
+          <button class="tab-btn active" data-img="images/11_CC_sustainability.webp" data-title="核心圖｜sustainability 構詞拆解">核心圖</button>
+          <button class="tab-btn" data-img="extensions/11_CG_tain5.webp" data-title="字族圖 1｜-tain 常用核心字族">字族圖 1</button>
+          <button class="tab-btn" data-img="extensions/11_CG_tainvsten多.webp" data-title="字族圖 2｜tain vs ten / tend 擴展字族">字族圖 2</button>
+        </div>
+      </div>
+
+      <!-- Family Words & Audio Section -->
+      <section class="family-section">
+        <div class="family-header">
+          <div class="family-title">
+            <span>字族發音練習</span>
+            <span class="family-count" id="family-count">38 字</span>
+          </div>
+          <span class="family-hint">點單字即播放</span>
+        </div>
+        <input type="text" class="family-search" id="family-search" placeholder="🔍 快速篩選字族單字 (例如: retain, tend)..." />
+        <div class="family-tags" id="family-words-list">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <!-- Mastery Button -->
+      <button class="mastery-btn" id="btn-mastery" type="button">
+        標記為已掌握 (Save Progress)
+      </button>
+
+      <!-- Pedagogical Design Note for Competition -->
+      <div class="pedagogy-note">
+        <strong>教案比賽 AI 協作亮點：</strong><br>
+        本單元落實「圖像認知優先 ➔ 語素拆解 ➔ 字族擴展遷移 ➔ 即時語音回饋」之多感官自學循環，協助學生掌握 SDGs 超高頻詞彙及 38+ 關聯字族。
+      </div>
+    </aside>
+
+    <!-- Right Image Stage -->
+    <section class="stage-area">
+      <div class="stage-header">
+        <span class="stage-badge" id="current-img-badge">核心圖｜sustainability 構詞拆解</span>
+        <span class="stage-hint">點擊圖片可放大檢視 [Esc 關閉]</span>
+      </div>
+      <div class="stage-canvas" id="stage-canvas" title="點擊放大此圖片">
+        <img class="stage-image" id="main-image" src="images/11_CC_sustainability.webp" alt="sustainability 核心教學圖" />
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Lightbox Modal -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="放大圖片">
+  <button class="lightbox-close" id="lightbox-close" title="關閉">✕</button>
+  <img class="lightbox-img" id="lightbox-img" src="" alt="放大教材圖" />
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+(function() {
+  // Family words data for Unit 11 (tain / ten / tend family)
+  const familyWords = [
+    'entertain', 'contain', 'obtain', 'retain', 'maintain', 'abstain',
+    'content', 'continent', 'continue', 'detain', 'attain', 'pertain',
+    'sustain', 'tenacious', 'tenant', 'tenet', 'tenure', 'tense',
+    'tension', 'tend', 'tendency', 'extend', 'extent', 'extension',
+    'extensive', 'intense', 'intensify', 'intensity', 'intensive',
+    'intend', 'intent', 'intention', 'attend', 'attendance',
+    'attendant', 'attention', 'pretend', 'contend'
+  ];
+
+  const mainWord = 'sustainability';
+  const STORAGE_KEY = 'unit11-sustainability-mastered';
+  const toast = document.getElementById('toast');
+  let toastTimer;
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 1500);
+  }
+
+  // Audio Speech Synthesis
+  function speak(text, buttonEl) {
+    if (!('speechSynthesis' in window)) {
+      showToast('您的瀏覽器不支援語音合成');
+      return;
+    }
+    window.speechSynthesis.cancel();
+    document.querySelectorAll('.is-speaking').forEach(el => el.classList.remove('is-speaking'));
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.82;
+    utterance.pitch = 1.0;
+
+    const voices = window.speechSynthesis.getVoices();
+    const usVoice = voices.find(v => /^en-US/i.test(v.lang)) || voices.find(v => /^en/i.test(v.lang));
+    if (usVoice) utterance.voice = usVoice;
+
+    if (buttonEl) buttonEl.classList.add('is-speaking');
+    utterance.onend = utterance.onerror = () => {
+      if (buttonEl) buttonEl.classList.remove('is-speaking');
+    };
+
+    window.speechSynthesis.speak(utterance);
+  }
+
+  // Core Word Audio
+  const coreAudioBtn = document.getElementById('btn-speak-core');
+  coreAudioBtn.addEventListener('click', () => speak(mainWord, coreAudioBtn));
+
+  // Populate Family Words
+  const wordsContainer = document.getElementById('family-words-list');
+  const searchInput = document.getElementById('family-search');
+
+  function renderFamily(list) {
+    wordsContainer.innerHTML = '';
+    list.forEach(w => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'family-chip';
+      btn.textContent = w;
+      btn.setAttribute('aria-label', `播放 ${w} 發音`);
+      btn.addEventListener('click', () => speak(w, btn));
+      wordsContainer.appendChild(btn);
+    });
+  }
+
+  renderFamily(familyWords);
+
+  searchInput.addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase().trim();
+    const filtered = familyWords.filter(w => w.toLowerCase().includes(q));
+    renderFamily(filtered);
+    document.getElementById('family-count').textContent = `${filtered.length} 字`;
+  });
+
+  // Tab Image Switching
+  const tabs = document.querySelectorAll('.tab-btn');
+  const mainImage = document.getElementById('main-image');
+  const badge = document.getElementById('current-img-badge');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const targetSrc = tab.getAttribute('data-img');
+      const title = tab.getAttribute('data-title');
+
+      mainImage.classList.add('is-changing');
+      setTimeout(() => {
+        mainImage.src = targetSrc;
+        badge.textContent = title;
+        mainImage.classList.remove('is-changing');
+      }, 100);
+    });
+  });
+
+  // Lightbox
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxClose = document.getElementById('lightbox-close');
+  const stageCanvas = document.getElementById('stage-canvas');
+
+  stageCanvas.addEventListener('click', () => {
+    lightboxImg.src = mainImage.src;
+    lightbox.classList.add('open');
+  });
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    lightboxImg.src = '';
+  }
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox || e.target === lightboxClose) closeLightbox();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox.classList.contains('open')) {
+      closeLightbox();
+    }
+  });
+
+  // Mastery Tracking (LocalStorage)
+  const masteryBtn = document.getElementById('btn-mastery');
+  const masteryIndicator = document.getElementById('mastery-indicator');
+  const masteryText = document.getElementById('mastery-text');
+
+  let isMastered = localStorage.getItem(STORAGE_KEY) === 'true';
+
+  function updateMasteryUI() {
+    if (isMastered) {
+      masteryBtn.classList.add('done');
+      masteryBtn.innerHTML = '✓ 已學會（點擊取消掌握）';
+      masteryIndicator.classList.add('is-done');
+      masteryText.textContent = '已完成掌握';
+    } else {
+      masteryBtn.classList.remove('done');
+      masteryBtn.innerHTML = '標記為已掌握 (Save Progress)';
+      masteryIndicator.classList.remove('is-done');
+      masteryText.textContent = '未標記學習';
+    }
+  }
+
+  masteryBtn.addEventListener('click', () => {
+    isMastered = !isMastered;
+    localStorage.setItem(STORAGE_KEY, isMastered ? 'true' : 'false');
+    updateMasteryUI();
+    showToast(isMastered ? '已標記為掌握！進度已儲存' : '已取消標記掌握');
+  });
+
+  updateMasteryUI();
+
+  // Fullscreen Toggle
+  const fsBtn = document.getElementById('btn-fullscreen');
+  fsBtn.addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+      fsBtn.textContent = '⛶ 退出全螢幕';
+    } else {
+      document.exitFullscreen().catch(() => {});
+      fsBtn.textContent = '⛶ 全螢幕';
+    }
+  });
+
+  document.addEventListener('fullscreenchange', () => {
+    fsBtn.textContent = document.fullscreenElement ? '⛶ 退出全螢幕' : '⛶ 全螢幕';
+  });
+})();
+</script>
+</body>
+</html>
